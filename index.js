@@ -58,6 +58,37 @@ async function run() {
             }
         });
 
+        app.put('/myToys/:id', async (req, res) => {
+            try {
+              const id = req.params.id;
+              const body = req.body;
+              const query = { _id: new ObjectId(id) };
+              const updatedDoc = {
+                $set: {
+                  price: body.price,
+                  quantity: body.quantity,
+                  description: body.description
+                }
+              };
+              const result = await toyCollection.updateOne(query, updatedDoc);
+              res.send({ result });
+            } catch (error) {
+              res.send(error.message);
+            }
+          });
+          
+          
+          app.delete('/myToys/:id', async (req, res) => {
+            try {
+              const id = req.params.id; // Retrieve email from query parameters
+              const query = { _id : new ObjectId(id) };
+              const result = await toyCollection.deleteOne(query);
+              res.send(result);
+            } catch (error) {
+              res.send(error.message)
+            }
+          });
+
 
 
         app.get('/categoryToyDetails', async (req, res) => {
