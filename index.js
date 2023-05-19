@@ -23,7 +23,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-     
+
         // Connect the client to the server	(optional starting in v4.7)
         const toyCollection = client.db('AnimeToys').collection('Toys')
         const categoryToyCollection = client.db('AnimeToys').collection('CategoryToys')
@@ -39,20 +39,33 @@ async function run() {
         })
         app.get('/toyDetails/:id', async (req, res) => {
             try {
-              const id = req.params.id;
-              const query = {_id : new ObjectId(id)}
-              const result = await toyCollection.findOne(query);
-              res.send(result)        
+                const id = req.params.id;
+                const query = { _id: new ObjectId(id) }
+                const result = await toyCollection.findOne(query);
+                res.send(result)
             } catch (error) {
-              res.send(error.message)
+                res.send(error.message)
             }
-          })
-          app.get('/categoryToyDetails', async (req, res) =>{
+        })
+        app.get('/myToys/:email', async (req, res) => {
+            try {
+                const email = req.params.email;
+                const query = { email: email };
+                const result = await toyCollection.find(query).toArray();
+                res.send(result);
+            } catch (error) {
+                res.send(error.message)
+            }
+        });
+
+
+
+        app.get('/categoryToyDetails', async (req, res) => {
             const result = await categoryToyCollection.find().toArray()
             res.send(result)
-          })
-         
-         
+        })
+
+
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
