@@ -88,13 +88,19 @@ async function run() {
               res.send(error.message)
             }
           });
-
-
-
-        app.get('/categoryToyDetails', async (req, res) => {
+          app.get('/categoryToys', async (req, res) =>{
             const result = await categoryToyCollection.find().toArray()
             res.send(result)
-        })
+          })
+          app.get('/categoryToyDetails/:id', async (req, res) => {
+            try {
+              const id = req.params.id;
+              const result = await categoryToyCollection.findOne({_id : new ObjectId(id)});
+              res.send(result);
+            } catch (error) {
+              res.send(error.message);
+            }
+          });
 
 
         // Send a ping to confirm a successful connection
