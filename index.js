@@ -65,7 +65,6 @@ async function run() {
         if (req.query.email) {
           const query = { email: req.query.email };
           const sort = req?.query?.sort === 'true' ? 1 : -1;
-          console.log(sort);
           const result = await toyCollection.find(query).sort({ price: sort }).toArray();
           res.send(result);
         } else {
@@ -81,6 +80,7 @@ async function run() {
         const id = req.params.id;
         const body = req.body;
         const query = { _id: new ObjectId(id) };
+        console.log(id)
         const updatedDoc = {
           $set: {
             price: body.price,
@@ -89,7 +89,7 @@ async function run() {
           }
         };
         const result = await toyCollection.updateOne(query, updatedDoc);
-        res.send({ result });
+        res.send(result);
       } catch (error) {
         res.send(error.message);
       }
